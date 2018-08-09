@@ -20,6 +20,7 @@ public class GroovyUtil {
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
 
+    //根据groovy文件初始化类
     public void registerObjByFile(String FilePath, String objName) throws Exception{
         File file = new File(FilePath);
         SignInterface signInterface = (SignInterface) new GroovyClassLoader(getClass().getClassLoader()).parseClass(file).newInstance();
@@ -29,6 +30,7 @@ public class GroovyUtil {
 
     }
 
+    //根据groovy字符串初始化类
     public void registerObjByStr(String groovyStr, String objName) throws Exception{
         SignInterface signInterface = (SignInterface) new GroovyClassLoader(getClass().getClassLoader()).parseClass(groovyStr).newInstance();
         defaultListableBeanFactory.registerSingleton(objName,signInterface);
@@ -37,14 +39,6 @@ public class GroovyUtil {
 
     }
 
-//    public static void main(String[] args) throws Exception{
-//
-//        GroovyUtil t = new GroovyUtil();
-//        File file = new File("/Users/yejun/IdeaProjects/groovyTest/src/main/resources/AliSign.groovy");
-//        SignInterface signInterface = (SignInterface) new GroovyClassLoader(t.getClass().getClassLoader()).parseClass(file).newInstance();
-//        System.out.println(signInterface.getSign(new HashMap<>()));
-//        System.out.println(signInterface.doVerify(new HashMap<>()));
-//
-//    }
+
 
 }
