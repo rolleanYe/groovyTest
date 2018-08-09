@@ -1,7 +1,7 @@
 package com.example.groovydemo;
 
-import com.example.groovydemo.test01.SignInterface;
 import com.example.groovydemo.test01.GroovyUtil;
+import com.example.groovydemo.test01.SignInterface;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
@@ -22,25 +23,58 @@ public class GroovydemoApplicationTests {
 	@Autowired
 	DefaultListableBeanFactory defaultListableBeanFactory;
 
+	String wx = "package com.example.groovydemo.test01;\n" +
+			"\n" +
+			"import java.util.Map;\n" +
+			"\n" +
+			"/**\n" +
+			" * Created by rollean.\n" +
+			" */\n" +
+			"public class WXSign implements SignInterface{\n" +
+			"\n" +
+			"    @Override\n" +
+			"    public String getSign(Map<String, String> params) {\n" +
+			"        return \"======wxsign======\";\n" +
+			"    }\n" +
+			"\n" +
+			"    @Override\n" +
+			"    public boolean doVerify(Map<String, String> params) {\n" +
+			"        return true;\n" +
+			"    }\n" +
+			"\n" +
+			"\n" +
+			"}";
+
+
+
 	@Test
 	public void contextLoads() {
 
 		try {
 			String aliBeanName = "aliSign";
 			String aliFilePath = "/Users/yejun/IdeaProjects/groovyTest/src/main/resources/AliSign.groovy";
-			groovyUtil.registerObj(aliFilePath,aliBeanName);
-
+			groovyUtil.registerObjByFile(aliFilePath,aliBeanName);
 
 			String wxBeanName = "wxSign";
 			String wxFilePath = "/Users/yejun/IdeaProjects/groovyTest/src/main/resources/WXSign.groovy";
-			groovyUtil.registerObj(wxFilePath,wxBeanName);
-			
+
 			SignInterface aliSignInterface = (SignInterface)defaultListableBeanFactory.getBean(aliBeanName);
+
+			if(!defaultListableBeanFactory.containsSingleton(wxBeanName)){
+				System.out.println("初始化wxSignInterface");
+
+				groovyUtil.registerObjByStr(wx,wxBeanName);
+
+				defaultListableBeanFactory.destroySingleton(wxBeanName);
+
+				groovyUtil.registerObjByFile(wxFilePath,wxBeanName);
+			}
+
 			SignInterface wxSignInterface = (SignInterface)defaultListableBeanFactory.getBean(wxBeanName);
 
 			System.out.println(aliSignInterface.getSign(new HashMap<>()));
 			System.out.println(wxSignInterface.getSign(new HashMap<>()));
-
+			System.out.println(wxSignInterface.doVerify(new HashMap<>()));
 
 		} catch (Exception e) {
 			e.printStackTrace();

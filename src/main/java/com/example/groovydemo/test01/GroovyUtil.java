@@ -7,7 +7,6 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.util.HashMap;
 
 /**
  * Created by rollean.
@@ -21,7 +20,7 @@ public class GroovyUtil {
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
 
-    public void registerObj(String FilePath, String objName) throws Exception{
+    public void registerObjByFile(String FilePath, String objName) throws Exception{
         File file = new File(FilePath);
         SignInterface signInterface = (SignInterface) new GroovyClassLoader(getClass().getClassLoader()).parseClass(file).newInstance();
         defaultListableBeanFactory.registerSingleton(objName,signInterface);
@@ -30,6 +29,13 @@ public class GroovyUtil {
 
     }
 
+    public void registerObjByStr(String groovyStr, String objName) throws Exception{
+        SignInterface signInterface = (SignInterface) new GroovyClassLoader(getClass().getClassLoader()).parseClass(groovyStr).newInstance();
+        defaultListableBeanFactory.registerSingleton(objName,signInterface);
+
+        beanFactory.autowireBean(signInterface);
+
+    }
 
 //    public static void main(String[] args) throws Exception{
 //
