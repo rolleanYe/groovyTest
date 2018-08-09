@@ -25,18 +25,12 @@ public class GroovyUtil {
         File file = new File(FilePath);
         SignInterface signInterface = (SignInterface) new GroovyClassLoader(getClass().getClassLoader()).parseClass(file).newInstance();
         defaultListableBeanFactory.registerSingleton(objName,signInterface);
-
-        beanFactory.autowireBean(signInterface);
-
     }
 
     //根据groovy字符串初始化类
     public void registerObjByStr(String groovyStr, String objName) throws Exception{
         SignInterface signInterface = (SignInterface) new GroovyClassLoader(getClass().getClassLoader()).parseClass(groovyStr).newInstance();
         defaultListableBeanFactory.registerSingleton(objName,signInterface);
-
-        beanFactory.autowireBean(signInterface);
-
     }
 
 
