@@ -23,25 +23,18 @@ public class GroovydemoApplicationTests {
 	DefaultListableBeanFactory defaultListableBeanFactory;
 
 	String wx = "package com.example.groovydemo.test01;\n" +
-			"\n" +
 			"import java.util.Map;\n" +
-			"\n" +
-			"/**\n" +
-			" * Created by rollean.\n" +
-			" */\n" +
+			"import com.example.groovydemo.signUtil.Md5Encrypt;\n" +
 			"public class WXSign implements SignInterface{\n" +
-			"\n" +
 			"    @Override\n" +
 			"    public String getSign(Map<String, String> params) {\n" +
-			"        return \"======wxsign======\";\n" +
+			"        //return \"======wxsign======\";\n" +
+			"        return Md5Encrypt.md5(\"1231231\",\"utf-8\");\n" +
 			"    }\n" +
-			"\n" +
 			"    @Override\n" +
 			"    public boolean doVerify(Map<String, String> params) {\n" +
 			"        return true;\n" +
 			"    }\n" +
-			"\n" +
-			"\n" +
 			"}";
 
 	@Test
@@ -62,9 +55,9 @@ public class GroovydemoApplicationTests {
 
 				groovyUtil.registerObjByStr(wx,wxBeanName);
 
-				defaultListableBeanFactory.destroySingleton(wxBeanName);
+//				defaultListableBeanFactory.destroySingleton(wxBeanName);
 
-				groovyUtil.registerObjByFile(wxFilePath,wxBeanName);
+//				groovyUtil.registerObjByFile(wxFilePath,wxBeanName);
 			}
 
 			SignInterface wxSignInterface = (SignInterface)defaultListableBeanFactory.getBean(wxBeanName);
