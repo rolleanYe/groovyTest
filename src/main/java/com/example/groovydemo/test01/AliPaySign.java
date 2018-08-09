@@ -8,14 +8,12 @@ import java.util.Map;
 public class AliPaySign implements SignInterface{
 
     @Override
-    public String getSign(Map<String, String> params) {
-        return "1231213123";
+    public String getSign(Object... params) {
+        return null;
     }
 
     @Override
-    public boolean doVerify(Map<String, String> params) {
+    public boolean doVerify(Object... params) {
         return false;
     }
-
-
 }

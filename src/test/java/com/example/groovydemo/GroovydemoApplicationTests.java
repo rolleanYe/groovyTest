@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,16 +22,30 @@ public class GroovydemoApplicationTests {
 	DefaultListableBeanFactory defaultListableBeanFactory;
 
 	String wx = "package com.example.groovydemo.test01;\n" +
-			"import java.util.Map;\n" +
 			"import com.example.groovydemo.signUtil.Md5Encrypt;\n" +
 			"public class WXSign implements SignInterface{\n" +
 			"    @Override\n" +
-			"    public String getSign(Map<String, String> params) {\n" +
+			"    public String getSign(Object... params) {\n" +
 			"        //return \"======wxsign======\";\n" +
-			"        return Md5Encrypt.md5(\"1231231\",\"utf-8\");\n" +
+			"        return Md5Encrypt.md5(params[0]+\"123+\",\"utf-8\");\n" +
 			"    }\n" +
 			"    @Override\n" +
-			"    public boolean doVerify(Map<String, String> params) {\n" +
+			"    public boolean doVerify(Object... params) {\n" +
+			"        return true;\n" +
+			"    }\n" +
+			"}";
+
+
+	String wx2 = "package com.example.groovydemo.test01;\n" +
+			"import com.example.groovydemo.signUtil.Md5Encrypt;\n" +
+			"public class WXSign implements SignInterface{\n" +
+			"    @Override\n" +
+			"    public String getSign(Object... params) {\n" +
+			"        //return \"======wxsign======\";\n" +
+			"        return Md5Encrypt.md5(params[0]+\"456+\",\"utf-8\");\n" +
+			"    }\n" +
+			"    @Override\n" +
+			"    public boolean doVerify(Object... params) {\n" +
 			"        return true;\n" +
 			"    }\n" +
 			"}";
@@ -45,34 +58,33 @@ public class GroovydemoApplicationTests {
 			String aliFilePath = "/Users/yejun/IdeaProjects/groovyTest/src/main/resources/AliSign.groovy";
 			groovyUtil.registerObjByFile(aliFilePath,aliBeanName);
 
-			String wxBeanName = "wxSign";
-			String wxFilePath = "/Users/yejun/IdeaProjects/groovyTest/src/main/resources/WXSign.groovy";
-
+			//初始化支付宝签名接口
 			SignInterface aliSignInterface = (SignInterface)defaultListableBeanFactory.getBean(aliBeanName);
+			System.out.println(aliSignInterface.getSign("000111222333"));
 
+
+			String wxBeanName = "wxSign";
+			//初始化微信签名接口
 			if(!defaultListableBeanFactory.containsSingleton(wxBeanName)){
 				System.out.println("初始化wxSignInterface");
-
 				groovyUtil.registerObjByStr(wx,wxBeanName);
-
-//				defaultListableBeanFactory.destroySingleton(wxBeanName);
-
-//				groovyUtil.registerObjByFile(wxFilePath,wxBeanName);
 			}
 
 			SignInterface wxSignInterface = (SignInterface)defaultListableBeanFactory.getBean(wxBeanName);
+			System.out.println(wxSignInterface.getSign("1234"));
 
-			System.out.println(aliSignInterface.getSign(new HashMap<>()));
-			System.out.println(wxSignInterface.getSign(new HashMap<>()));
-			System.out.println(wxSignInterface.doVerify(new HashMap<>()));
+			//刷新对象
+			defaultListableBeanFactory.destroySingleton(wxBeanName);
+			groovyUtil.registerObjByStr(wx2,wxBeanName);
+			wxSignInterface = (SignInterface)defaultListableBeanFactory.getBean(wxBeanName);
+
+			System.out.println(wxSignInterface.getSign("1234"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-
-
 
 
 }
