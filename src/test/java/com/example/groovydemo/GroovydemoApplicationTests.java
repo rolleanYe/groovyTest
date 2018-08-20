@@ -56,6 +56,7 @@ public class GroovydemoApplicationTests {
 		try {
 			String aliBeanName = "aliSign";
 			String aliFilePath = "/Users/yejun/IdeaProjects/groovyTest/src/main/resources/AliSign.groovy";
+			//根据groovy文件初始化类
 			groovyUtil.registerObjByFile(aliFilePath,aliBeanName);
 
 			//初始化支付宝签名接口
@@ -67,6 +68,7 @@ public class GroovydemoApplicationTests {
 			//初始化微信签名接口
 			if(!defaultListableBeanFactory.containsSingleton(wxBeanName)){
 				System.out.println("初始化wxSignInterface");
+				//根据groovy字符串初始化类
 				groovyUtil.registerObjByStr(wx,wxBeanName);
 			}
 
@@ -75,6 +77,7 @@ public class GroovydemoApplicationTests {
 
 			//刷新对象
 			defaultListableBeanFactory.destroySingleton(wxBeanName);
+			//根据groovy字符串初始化类
 			groovyUtil.registerObjByStr(wx2,wxBeanName);
 			wxSignInterface = (SignInterface)defaultListableBeanFactory.getBean(wxBeanName);
 
