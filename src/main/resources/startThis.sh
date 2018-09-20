@@ -1,5 +1,5 @@
 cd /Users/yejun/.jenkins/workspace/groovyTest-build
-mvn clean package
+mvn clean -Dmaven.test.skip=true package
 echo '~~build success~~'
-java -jar /Users/yejun/.jenkins/workspace/groovyTest-build/target/groovydemo-0.0.1-SNAPSHOT.jar &
+BUILD_ID=dontKillMe java -jar /Users/yejun/.jenkins/workspace/groovyTest-build/target/groovydemo-0.0.1-SNAPSHOT.jar &
 echo '~~start success~~'
