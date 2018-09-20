@@ -61,19 +61,19 @@ public class GroovydemoApplicationTests {
 
 			//初始化支付宝签名接口
 			SignInterface aliSignInterface = (SignInterface)defaultListableBeanFactory.getBean(aliBeanName);
-			System.out.println(aliSignInterface.getSign("000111222333"));
+			System.out.println("=========>" + aliSignInterface.getSign("000111222333"));
 
 
 			String wxBeanName = "wxSign";
 			//初始化微信签名接口
 			if(!defaultListableBeanFactory.containsSingleton(wxBeanName)){
-				System.out.println("初始化wxSignInterface");
+				System.out.println("=========>" + "初始化wxSignInterface");
 				//根据groovy字符串初始化类
 				groovyUtil.registerObjByStr(wx,wxBeanName);
 			}
 
 			SignInterface wxSignInterface = (SignInterface)defaultListableBeanFactory.getBean(wxBeanName);
-			System.out.println(wxSignInterface.getSign("1234"));
+			System.out.println("=========>" + wxSignInterface.getSign("1234"));
 
 			//刷新对象
 			defaultListableBeanFactory.destroySingleton(wxBeanName);
@@ -81,7 +81,7 @@ public class GroovydemoApplicationTests {
 			groovyUtil.registerObjByStr(wx2,wxBeanName);
 			wxSignInterface = (SignInterface)defaultListableBeanFactory.getBean(wxBeanName);
 
-			System.out.println(wxSignInterface.getSign("1234"));
+			System.out.println("=========>" + wxSignInterface.getSign("1234"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
