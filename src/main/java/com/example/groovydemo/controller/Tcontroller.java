@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Created by rollean.
  * http://localhost:9005/yejun/doControll?reqStr=343424242
+ * http://localhost:9005/swagger-ui.html
  */
 
 @Api(value = "Tcontroller", description = "测试GET请求")
